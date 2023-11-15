@@ -11,8 +11,9 @@ public class SceneController extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(SceneController.class.getResource("StartScene.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(),300,600);
-        stage.setTitle("Hello!");
+        fxmlLoader.setController(new StartSceneController());
+        Scene scene = new Scene(fxmlLoader.load(), 400, 600);
+        stage.setTitle("STICK HERO");
         stage.setScene(scene);
         stage.show();
     }
