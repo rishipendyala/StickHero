@@ -5,4 +5,6 @@ module com.example.stickhero {
 
     opens com.example.stickhero to javafx.fxml;
     exports com.example.stickhero;
+    exports com.example.stickhero.Code;
+    opens com.example.stickhero.Code to javafx.fxml;
 }
