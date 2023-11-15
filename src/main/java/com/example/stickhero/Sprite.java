@@ -1,4 +1,6 @@
-package com.example.stickhero.Code;
+package com.example.stickhero;
+
+import com.example.stickhero.Skin;
 
 import java.util.ArrayList;
 

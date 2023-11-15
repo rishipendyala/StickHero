@@ -1,4 +1,4 @@
-package com.example.stickhero.Code;
+package com.example.stickhero;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

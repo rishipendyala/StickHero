@@ -1,4 +1,4 @@
-package com.example.stickhero.Code;
+package com.example.stickhero;
 
 public class Stick {
 
