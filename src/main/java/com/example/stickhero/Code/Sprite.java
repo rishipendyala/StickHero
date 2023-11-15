@@ -37,7 +37,7 @@ public class Sprite {
     }
 
     public void revive(){
-
+;
     }
 
     public void isOnStick(){
