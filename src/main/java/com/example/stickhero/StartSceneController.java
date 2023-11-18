@@ -3,6 +3,7 @@ package com.example.stickhero;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.image.Image;
@@ -15,11 +16,14 @@ import java.util.ResourceBundle;
 public class StartSceneController  implements Initializable {
     @FXML
     private ImageView characterImageView;
-    private int frameCount = 6;
+    @FXML
+    private ImageView background;
+    private final int frameCount = 6;
     private int currentFrame = 0;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        Image idlesheet = new Image("C:\\Users\\Armaan Singh\\Desktop\\APproject\\src\\main\\resources\\com\\example\\stickhero\\IMAGES\\IDLE.png");
+        Image bg = new Image("background1.png");
+        Image idlesheet = new Image("IDLE.png");
         characterImageView.setImage(idlesheet);
         Duration frameDuration = Duration.millis(100);
         Timeline timeline = new Timeline(
@@ -27,6 +31,7 @@ public class StartSceneController  implements Initializable {
         );
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
+        background.setImage(bg);
     }
     private void animateSprite(){
         double frameWidth = 100.0; // Assuming each frame is 100x100 pixels
@@ -38,4 +43,5 @@ public class StartSceneController  implements Initializable {
         // Move to the next frame
         currentFrame = (currentFrame + 1) % frameCount;
     }
+
 }

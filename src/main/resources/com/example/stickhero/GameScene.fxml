@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.stickhero.GameScene"
-            prefHeight="400.0" prefWidth="600.0">
-
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/20" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <ImageView fx:id="background" fitHeight="609.0" fitWidth="408.0" layoutX="-4.0" opacity="0.89" pickOnBounds="true" smooth="false" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#0d0d0d" height="200.0" layoutY="400.0" stroke="BLACK" strokeType="INSIDE" width="115.0" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" height="200.0" layoutX="212.0" layoutY="400.0" stroke="BLACK" strokeType="INSIDE" width="20.0" />
+      <Rectangle fill="#ff1f1f" height="10.0" layoutX="217.0" layoutY="400.0" stroke="BLACK" strokeType="INSIDE" width="11.0" />
+      <ImageView fx:id="box" fitHeight="100.0" fitWidth="100.0" layoutX="8.0" layoutY="326.0" pickOnBounds="true" preserveRatio="true" />
+   </children>
 </AnchorPane>

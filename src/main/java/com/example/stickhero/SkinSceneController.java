@@ -1,2 +1,4 @@
-package com.example.stickhero;public class SkinSceneController {
+package com.example.stickhero;
+
+public class SkinSceneController {
 }

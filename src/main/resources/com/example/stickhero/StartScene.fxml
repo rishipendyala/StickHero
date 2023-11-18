@@ -9,6 +9,7 @@
 
 <AnchorPane prefHeight="600.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/20" xmlns:fx="http://javafx.com/fxml/1">
    <children>
+      <ImageView fx:id="background" fitHeight="600.0" fitWidth="400.0" pickOnBounds="true" />
       <Label layoutX="136.0" layoutY="52.0" prefHeight="76.0" prefWidth="137.0" text="STICK">
          <font>
             <Font size="50.0" />
@@ -27,7 +28,6 @@
       <Button layoutX="14.0" layoutY="329.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="56.0" style="-fx-background-radius: 50;" text="BONUS" />
       <Button layoutX="330.0" layoutY="329.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="56.0" style="-fx-background-radius: 50;" text="SKINS" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#141414" height="200.0" layoutX="136.0" layoutY="400.0" stroke="BLACK" strokeType="INSIDE" width="143.0" />
-      <ImageView fx:id="idleview" fitHeight="100.0" fitWidth="100.0" layoutX="158.0" layoutY="300.0" pickOnBounds="true" preserveRatio="true" />
       <ImageView fx:id="characterImageView" fitHeight="100.0" fitWidth="100.0" layoutX="150.0" layoutY="323.0" nodeOrientation="INHERIT" pickOnBounds="true" smooth="false" />
    </children>
 </AnchorPane>
