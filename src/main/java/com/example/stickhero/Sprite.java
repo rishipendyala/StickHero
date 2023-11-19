@@ -7,12 +7,59 @@ import java.util.ArrayList;
 public class Sprite {
 
     private Skin currentSkin;
-    private ArrayList<Skin> skins = new ArrayList<>();
+    private ArrayList<Skin> mySkins = new ArrayList<>();
     private String userDetails;
 
     private int collected;
 
     private int highScore;
+
+    public Sprite(Skin currentSkin, String userDetails, int collected, int highScore) {
+        this.currentSkin = currentSkin;
+        this.userDetails = userDetails;
+        this.collected = collected;
+        this.highScore = highScore;
+    }
+
+    public Skin getCurrentSkin() {
+        return currentSkin;
+    }
+
+    public void setCurrentSkin(Skin currentSkin) {
+        this.currentSkin = currentSkin;
+    }
+
+    public ArrayList<Skin> getSkins() {
+        return mySkins;
+    }
+
+    public void setSkins(ArrayList<Skin> skins) {
+        this.mySkins = skins;
+    }
+
+    public String getUserDetails() {
+        return userDetails;
+    }
+
+    public void setUserDetails(String userDetails) {
+        this.userDetails = userDetails;
+    }
+
+    public int getCollected() {
+        return collected;
+    }
+
+    public void setCollected(int collected) {
+        this.collected = collected;
+    }
+
+    public int getHighScore() {
+        return highScore;
+    }
+
+    public void setHighScore(int highScore) {
+        this.highScore = highScore;
+    }
 
     public void invert(){
 
@@ -44,6 +91,10 @@ public class Sprite {
 
     public void isOnStick(){
 
+    }
+
+    public void addSkin(){
+        // add skin to the skins
     }
 
 }
