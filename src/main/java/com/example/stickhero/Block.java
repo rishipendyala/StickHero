@@ -1,48 +1,48 @@
 package com.example.stickhero;
 
 public abstract class Block {
-    private int height;
-    private int width;
+    private double height;
+    private double width;
 
-    private int x;
-    private int y;
+    private double x;
+    private double y;
 
-    public Block(int height, int width, int x, int y) {
+    public Block(double height, double width, double x, double y) {
         this.height = height;
         this.width = width;
         this.x = x;
         this.y = y;
     }
 
-    public int getWidth() {
+    public double getWidth() {
         return width;
     }
 
-    public void setWidth(int width) {
+    public void setWidth(double width) {
         this.width = width;
     }
 
-    public int getX() {
+    public double getX() {
         return x;
     }
 
-    public void setX(int x) {
+    public void setX(double x) {
         this.x = x;
     }
 
-    public int getY() {
+    public double getY() {
         return y;
     }
 
-    public void setY(int y) {
+    public void setY(double y) {
         this.y = y;
     }
 
-    public int getHeight() {
+    public double getHeight() {
         return height;
     }
 
-    public void setHeight(int height) {
+    public void setHeight(double height) {
         this.height = height;
     }
 

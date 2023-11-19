@@ -10,14 +10,13 @@ public class Sprite {
     private ArrayList<Skin> mySkins = new ArrayList<>();
     private String userDetails;
 
-    private int collected;
+    private ArrayList<Collectible> collected = new ArrayList<>();
 
     private int highScore;
 
     public Sprite(Skin currentSkin, String userDetails, int collected, int highScore) {
         this.currentSkin = currentSkin;
         this.userDetails = userDetails;
-        this.collected = collected;
         this.highScore = highScore;
     }
 
@@ -45,20 +44,24 @@ public class Sprite {
         this.userDetails = userDetails;
     }
 
-    public int getCollected() {
-        return collected;
-    }
-
-    public void setCollected(int collected) {
-        this.collected = collected;
-    }
-
     public int getHighScore() {
         return highScore;
     }
 
     public void setHighScore(int highScore) {
         this.highScore = highScore;
+    }
+
+    public ArrayList<Skin> getMySkins() {
+        return mySkins;
+    }
+
+    public void setMySkins(ArrayList<Skin> mySkins) {
+        this.mySkins = mySkins;
+    }
+
+    public void setCollected(ArrayList<Collectible> collected) {
+        this.collected = collected;
     }
 
     public void invert(){

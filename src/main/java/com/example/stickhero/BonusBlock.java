@@ -2,8 +2,8 @@ package com.example.stickhero;
 
 public class BonusBlock extends Block {
 
-    public BonusBlock(int height, int width, int x, int y) {
-        super(5, 5, x, y);
+    public BonusBlock(double height, double width, double x, double y) {
+        super(height, width, x, y);
     }
 
     @Override

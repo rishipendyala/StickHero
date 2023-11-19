@@ -5,25 +5,24 @@ public class GameMechanics {
     public GameMechanics() {
     }
 
-    public boolean isPressed(){
+    public static boolean isPressed(){
         //if pressed
-       return true;
+        return true;
     }
 
-    public void generateGround(){
-
-    }
-
-    public void generateCollectibles(){
-    }
-
-    public void moveBlockBack(){
-
-    }
-    public void isDead(){
+    public static void generateGround(){
 
     }
 
+    public static void generateCollectibles(){
+    }
+
+    public static void moveBlockBack(){
+
+    }
+    public static void isDead(){
 
 
+
+ }
 }

@@ -16,8 +16,7 @@ public class SceneController extends Application {
         stage.setResizable(false);
         stage.setTitle("STICK HERO");
         stage.setScene(scene);
-        stage.show();
-    }
+        stage.show();    }
 
     public static void main(String[] args) {
         launch();
