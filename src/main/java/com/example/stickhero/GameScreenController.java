@@ -33,15 +33,15 @@ public class GameScreenController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        Image bg = new Image("C:\\Users\\Armaan Singh\\Desktop\\APproject\\src\\main\\resources\\com\\example\\stickhero\\IMAGES\\background1.png");
-        Image idlesheet = new Image("C:\\Users\\Armaan Singh\\Desktop\\APproject\\src\\main\\resources\\com\\example\\stickhero\\IMAGES\\IDLE.png");
+        Image bg = new Image("background1.png");
+        /*Image idlesheet = new Image("IDLE.png");
         box.setImage(idlesheet);
         Duration frameDuration = Duration.millis(100);
         Timeline timeline = new Timeline(
                 new KeyFrame(frameDuration, event -> animateSprite())
         );
         timeline.setCycleCount(Timeline.INDEFINITE);
-        timeline.play();
+        timeline.play();*/
         background.setImage(bg);
     }
 }

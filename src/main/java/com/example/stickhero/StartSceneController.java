@@ -33,7 +33,7 @@ public class StartSceneController  implements Initializable {
         timeline.play();
         background.setImage(bg);
     }
-    private void animateSprite(){
+    public void animateSprite(){
         double frameWidth = 100.0; // Assuming each frame is 100x100 pixels
         double nextFrameX = (currentFrame % frameCount) * frameWidth;
 
