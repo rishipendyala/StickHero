@@ -20,7 +20,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import static java.lang.Thread.sleep;
 
-public class Game extends Application {
+public class Game  {
 
     private static final double FRAME_WIDTH = 100.0;
     private static final int FRAME_COUNT = 6;
@@ -28,27 +28,17 @@ public class Game extends Application {
     private static Rectangle curr = null;
     private static Rectangle secondary = null;
     private static Rectangle stick = null;
-    private boolean cangrow = true;
+    private static boolean cangrow = true;
     private static boolean StopRotation = true;
     private static ImageView sprite = new ImageView();
     private boolean isDead = false;
     private static boolean inverted = true;
     private static Scene scene;
     private static boolean isrunning = false;
-    public static void main(String[] args) {
-        launch(args);
-    }
 
-    @Override
-    public void start(Stage stage) {
-        try {
-            startGame(stage);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
-    private void startGame(Stage stage) throws Exception {
+
+     public static void start(Stage stage) throws Exception {
         // Create the game scene
         ImageView bg = new ImageView(new Image("background1.png"));
         bg.setFitHeight(600.0);
@@ -132,7 +122,7 @@ public class Game extends Application {
         spriteAnimation.play();
     }
 
-    private void startStickGrowth(Scene scene, Rectangle curr) {
+    private static void startStickGrowth(Scene scene, Rectangle curr) {
         stick = new Rectangle();
         stick.setWidth(5);
         stick.setHeight(0);
@@ -257,7 +247,7 @@ public class Game extends Application {
 
     private static Rectangle createBlock() {
         Rectangle x = new Rectangle();
-        double randomWidth = Math.random() * (200 - (sprite.getFitWidth())) + 10;
+        double randomWidth = Math.random() * (200 - 100) + 10;
         x.setWidth(randomWidth);
         x.setHeight(200);
         x.setArcHeight(5.0);
@@ -274,17 +264,18 @@ public class Game extends Application {
     }
 
     private static void translateBlocks() throws InterruptedException {
+        /*
         System.out.println("HELLO");
-
+        sprite.setImage(new Image("IDLE.png"));
 
         //moving the previous block outside the screen to the left (stage left)
         TranslateTransition prevBlock = new TranslateTransition(Duration.seconds(1),curr);
         prevBlock.setToX(-400);
         prevBlock.setOnFinished(event -> curr = null);
 
-        TranslateTransition currBlock = new TranslateTransition(Duration.seconds(1), secondary);
+        TranslateTransition currBlock = new TranslateTransition(Duration.seconds(1), curr=secondary);
         currBlock.setToX(0);
-        currBlock.setOnFinished(event -> curr = secondary);
+        currBlock.setOnFinished(event -> {curr.setStroke(Color.RED);secondary = createBlock();});
 
         TranslateTransition spriteBlock = new TranslateTransition(Duration.seconds(1), sprite);
         spriteBlock.setToX(curr.getWidth() / 2);
@@ -299,13 +290,18 @@ public class Game extends Application {
         newBlock.setOnFinished(event -> {
             secondary.setX(randomXLayout);
             System.out.println(secondary.getX());
+            isrunning = false;
         });
 
         ParallelTransition parallelTransition = new ParallelTransition(prevBlock, currBlock, spriteBlock, stickBlock);
         parallelTransition.setOnFinished(event -> newBlock.play());
         parallelTransition.play();
 
-        /*//moving the current block to the left part of the screen
+        //move the background
+
+        // moving the current block to the left part of the screen
+        */
+        /*
         TranslateTransition currBlock = new TranslateTransition(Duration.seconds(1),secondary);
         currBlock.setOnFinished(event -> {curr = secondary;secondary  = createBlock();});
 
@@ -333,8 +329,15 @@ public class Game extends Application {
         newBlock.setToX(randomXLayout);
         newBlock.setOnFinished(event -> isrunning = false);
         parallelTransition.setOnFinished(event -> newBlock.play());*/
-    }
+        translateBlock(secondary,0);
 
+
+    }
+    private static void translateBlock(Rectangle rectangle, int to) throws InterruptedException {
+        T1 t1 = new T1(rectangle,to);
+        Thread t = new Thread(t1);
+        t.start();
+    }
 
 
 }
