@@ -9,9 +9,10 @@ import java.util.Map;
 
 
 public class Music {
+    // THIS CLASS IMPLEMENTS THE FLYWEIGHT DESIGN PATTERN
+    // WE ONLY HAVE ONE OBJECT PER STATE - implemented using hashmap and lazy instantiation
     private String type;
     private String filePath;
-
     private MediaPlayer mediaPlayer;
 
     private static Map<String, Music> instances =

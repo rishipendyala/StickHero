@@ -22,6 +22,10 @@ import javafx.scene.text.TextBoundsType;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -57,6 +61,8 @@ public class Game  {
 
     private static Button collectibleButton;
     private static int Score= -1;
+
+    private static int highScore = 0;
     private static Button scoreB;
     private static Boolean cantInvert = false;
 
@@ -113,6 +119,24 @@ public class Game  {
             double randomXLayout = getRando(200,400);
             secondary.setX(randomXLayout);
         }
+
+        ObjectInputStream stats= null;
+        try{
+            stats = new ObjectInputStream(new FileInputStream("stats.txt"));
+            Stats prevStats = (Stats) stats.readObject();
+            highScore = prevStats.getHighScore();
+            collectibleCount = prevStats.getCoinCount();
+            System.out.println("HIGH SCORE: " + highScore);
+            System.out.println("CHERRY COUNT:" + collectibleCount);
+        }catch (Exception e){
+            Stats gameStats = new Stats(0,0);
+        }finally{
+            if (stats!=null){
+                stats.close();
+            }
+        }
+
+        // ADD HIGHSCORE HANDLING
         spriteAnimation.setCycleCount(Timeline.INDEFINITE);
         spriteAnimation.play();
         pane = new Pane(bg, curr,  secondary,sprite.getSpriteImage());
@@ -358,10 +382,9 @@ public class Game  {
         scoreDisplay.setFont(new Font(25));
         scoreDisplay.setFill(Color.BLACK);
 
-        int currentScore = 100;
-        Text scoreValue = new Text(String.valueOf(currentScore));
-        scoreValue.setLayoutX(endscreen.getX() + 120); // Adjust the X position
-        scoreValue.setLayoutY(endscreen.getY() + 90); // Adjust the Y position
+        Text scoreValue = new Text(String.valueOf(Score));
+        scoreValue.setLayoutX(endscreen.getX() + 128);
+        scoreValue.setLayoutY(endscreen.getY() + 90);
         scoreValue.setFont(new Font(40));
         scoreValue.setFill(Color.BLACK);
 
@@ -372,10 +395,10 @@ public class Game  {
         highScoreDisplay.setFont(new Font(25));
         highScoreDisplay.setFill(Color.BLACK);
 
-        int bestScore = 200;
-        Text bestValue = new Text(String.valueOf(bestScore));
-        bestValue.setLayoutX(endscreen.getX() + 120); // Adjust the X position
-        bestValue.setLayoutY(endscreen.getY() + 180); // Adjust the Y position
+
+        Text bestValue = new Text(String.valueOf(highScore));
+        bestValue.setLayoutX(endscreen.getX() + 128);
+        bestValue.setLayoutY(endscreen.getY() + 180);
         bestValue.setFont(new Font(40));
         bestValue.setFill(Color.BLACK);
 
@@ -432,6 +455,21 @@ public class Game  {
     private static void handleButtonClick(String buttonType) throws Exception {
         Stage stage = (Stage)(pane.getScene().getWindow());
         if (buttonType.equalsIgnoreCase("Home")){
+            if (Score>highScore){
+                highScore = Score;
+            }
+            Stats stats1 = new Stats(highScore,collectibleCount);
+            ObjectOutputStream statsFile = null;
+            try{
+                statsFile = new ObjectOutputStream(new FileOutputStream("stats.txt"));
+                statsFile.writeObject(stats1);
+                System.out.println("HIGH SCORE IS:" + highScore);
+                System.out.println("COIN COUNT:" + collectibleCount);
+            }finally {
+                if (statsFile!=null){
+                    statsFile.close();
+                }
+            }
             // go to the home screen
             FXMLLoader fxmlLoader1 = new FXMLLoader(SceneController.class.getResource("StartScene.fxml"));
             Scene scene1 = new Scene(fxmlLoader1.load(), 400, 600);
@@ -441,8 +479,29 @@ public class Game  {
             stage.setScene(scene1);
             stage.show();
         } else if (buttonType.equalsIgnoreCase("Restart")) {
+
+            if (collectibleCount<5){
+                System.out.println("CAN'T REVIVE");
+                return;
+            }
+            collectibleCount-=5;
             // restart the game loop
             System.out.println("RESTART");
+            if (Score>highScore){
+                highScore = Score;
+            }
+            Stats stats1 = new Stats(highScore,collectibleCount);
+            ObjectOutputStream statsFile = null;
+            try{
+                statsFile = new ObjectOutputStream(new FileOutputStream("stats.txt"));
+                statsFile.writeObject(stats1);
+                System.out.println("HIGH SCORE IS:" + highScore);
+                System.out.println("COIN COUNT:" + collectibleCount);
+            }finally {
+                if (statsFile!=null){
+                    statsFile.close();
+                }
+            }
             reset();
             start(stage,c);
         } else if ((buttonType.equalsIgnoreCase("Revive"))) {
