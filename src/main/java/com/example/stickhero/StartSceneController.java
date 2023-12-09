@@ -39,12 +39,12 @@ public class StartSceneController  implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        Image img = new Image("nextbutton.png");
-        ImageView view = new ImageView(img);
-        view.setFitHeight(55);
-        view.setFitWidth(55);
-        view.setPreserveRatio(true);
-        next.setGraphic(view);
+        //Image img = new Image("nextbutton.png");
+        //ImageView view = new ImageView(img);
+        //view.setFitHeight(55);
+       // view.setFitWidth(55);
+       // view.setPreserveRatio(true);
+        //next.setGraphic(view);
         imageList.add(new Image("IDLE.png"));
         imageList.add(new Image("astro-idle.png"));
         imageList.add(new Image("mario-idle.png"));
@@ -70,7 +70,7 @@ public class StartSceneController  implements Initializable {
 
         Event_ = event;
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Game.start(stage,counter  );
+        Game.start(stage,counter);
     }
     public void changeSkin(ActionEvent event) throws Exception {
         System.out.println(counter);

@@ -32,43 +32,49 @@ import java.util.Random;
 
 public class Game  {
 
-    private static final double FRAME_WIDTH = 100.0;
-    private static final int FRAME_COUNT = 6;
-    private static boolean spaceBarPressed = false;
-    private static Rectangle curr = null;
-    private static Rectangle secondary = null;
-    private static Rectangle stick = null;
-    private static boolean cangrow = true;
-    private static boolean StopRotation = true;
-    private static Sprite sprite;
-    private static boolean isDead = false;
-    private static boolean inverted = false;
-    private static Scene scene;
-    private static boolean isrunning = false;
-    private static ImageView bg = null;
-    private static Pane pane ;
-    private static ImageView collectible = null;
-    private static Image idle;
-    private static Image move;
-    private static Image kick;
-    private static ArrayList<Image> idleList = new ArrayList<>();
-    private static ArrayList<Image> moveList = new ArrayList<>();
-    private static ArrayList<Image> kickList = new ArrayList<>();
-    private static ArrayList<Image> invertList = new ArrayList<>();
-    private static int c = 0;
+    protected static final double FRAME_WIDTH = 100.0;
+    protected static final int FRAME_COUNT = 6;
+    protected static boolean spaceBarPressed = false;
+    protected static Block curr = null;
+    protected static Block secondary = null;
+    protected static Block stick = null;
+    protected static boolean cangrow = true;
+    protected static boolean StopRotation = true;
+    protected static Sprite sprite;
+    protected static boolean isDead = false;
+    protected static boolean inverted = false;
+    protected static Scene scene;
+    protected static boolean isrunning = false;
+    protected static ImageView bg = null;
+    protected static Pane pane ;
+    protected static ImageView collectible = null;
+    protected static Image idle;
+    protected static Image move;
+    protected static Image kick;
+    protected static ArrayList<Image> idleList = new ArrayList<>();
+    protected static ArrayList<Image> moveList = new ArrayList<>();
+    protected static ArrayList<Image> kickList = new ArrayList<>();
+    protected static ArrayList<Image> invertList = new ArrayList<>();
+    protected static int c = 0;
 
-    private static int collectibleCount = 0;
+    protected static Block bonus = null;
 
-    private static Button collectibleButton;
-    private static int Score= -1;
+    protected static int collectibleCount = 0;
 
-    private static int highScore = 0;
-    private static Button scoreB;
-    private static Boolean cantInvert = false;
+    protected static Button collectibleButton;
+    protected static int Score= -1;
 
-    private static Music bgm = null;
-    private static Music coin = null;
-    private static Music deathSound = null;
+    protected static int highScore = 0;
+    protected static Button scoreB;
+    protected static Boolean cantInvert = false;
+
+    protected static Music bgm = null;
+    protected static Music coin = null;
+    protected static Music deathSound = null;
+
+    public static String getIdlePath(){
+        return "IDLE.png";
+    }
 
     public static void start(Stage stage,int count) throws Exception {
 
@@ -94,30 +100,30 @@ public class Game  {
         bg.setFitHeight(600.0);
         bg.setFitWidth(400.0);
         // Creating the first rectangle
-        curr = new Rectangle();
-        curr.setHeight(200);
-        curr.setWidth(110);
-        curr.setArcHeight(5.0);
-        curr.setArcWidth(5.0);
-        curr.setX(0);
-        curr.setY(600 - curr.getHeight());
-        curr.setFill(Color.web("#0d0d0d"));
+        curr = new Block(new Rectangle());
+        curr.getBlock().setHeight(200);
+        curr.getBlock().setWidth(110);
+        curr.getBlock().setArcHeight(5.0);
+        curr.getBlock().setArcWidth(5.0);
+        curr.getBlock().setX(0);
+        curr.getBlock().setY(600 - curr.getBlock().getHeight());
+        curr.getBlock().setFill(Color.web("#0d0d0d"));
         // Adding the sprite along with its animation
-        idleSprite();
+        Sprite.idleSprite();
         sprite.getSpriteImage().setFitHeight(100);
         sprite.getSpriteImage().setFitWidth(100);
 
-        sprite.getSpriteImage().setX(curr.getWidth() - 100);
-        sprite.getSpriteImage().setY(600 - (curr.getHeight() + 75));
+        sprite.getSpriteImage().setX(curr.getBlock().getWidth() - 100);
+        sprite.getSpriteImage().setY(600 - (curr.getBlock().getHeight() + 75));
 
         Timeline spriteAnimation = new Timeline(
-                new KeyFrame(Duration.millis(100), event -> animateSprite(sprite.getSpriteImage()))
+                new KeyFrame(Duration.millis(100), event -> Sprite.animateSprite(sprite.getSpriteImage()))
         );
         T2 t2 = new T2();
         if (secondary == null) {
-            secondary = createBlock();
+            secondary = new Block(createBlock());
             double randomXLayout = getRando(200,400);
-            secondary.setX(randomXLayout);
+            secondary.getBlock().setX(randomXLayout);
         }
 
         ObjectInputStream stats= null;
@@ -127,7 +133,7 @@ public class Game  {
             highScore = prevStats.getHighScore();
             collectibleCount = prevStats.getCoinCount();
             System.out.println("HIGH SCORE: " + highScore);
-            System.out.println("CHERRY COUNT:" + collectibleCount);
+            System.out.println("COIN COUNT:" + collectibleCount);
         }catch (Exception e){
             Stats gameStats = new Stats(0,0);
         }finally{
@@ -139,7 +145,7 @@ public class Game  {
         // ADD HIGHSCORE HANDLING
         spriteAnimation.setCycleCount(Timeline.INDEFINITE);
         spriteAnimation.play();
-        pane = new Pane(bg, curr,  secondary,sprite.getSpriteImage());
+        pane = new Pane(bg, curr.getBlock(),  secondary.getBlock(),sprite.getSpriteImage());
         scene = new Scene(pane, 400, 600);
         gameLoop(scene);
         stage.setScene(scene);
@@ -149,12 +155,7 @@ public class Game  {
         bgm.playMusic();
         stage.show();
     }
-    private static void idleSprite(){
-        sprite.getSpriteImage().setImage(idleList.get(c));
-    }
-    private static void invertSprite(){
-        sprite.getSpriteImage().setImage(invertList.get(c));
-    }
+
 
     private static void gameLoop(Scene scene){
 
@@ -185,26 +186,38 @@ public class Game  {
             pane.getChildren().add(collectibleButton);
         }
         Score++;
+        if (bonusCollected){
+            Score++;
+        }
         // Update the text of the scoreLabel
         scoreB.setText(String.valueOf(Score));
         collectibleButton.setText(String.valueOf(collectibleCount));
         if (secondary == null) {
-            secondary = new Rectangle();
+            secondary = new Block(new Rectangle());
             double randomWidth = getRando(90,150);
-            secondary.setHeight(200);
-            secondary.setStroke(Color.YELLOW);
-            secondary.setWidth(randomWidth);
-            secondary.setArcHeight(5.0);
-            secondary.setArcWidth(5.0);
+            secondary.getBlock().setHeight(200);
+            secondary.getBlock().setWidth(randomWidth);
+            secondary.getBlock().setArcHeight(5.0);
+            secondary.getBlock().setArcWidth(5.0);
             double randomXLayout = getRando(170,(int)(430 - randomWidth));
-            secondary.setX(randomXLayout);
-            secondary.setY(600 - curr.getHeight());
-            secondary.setFill(Color.web("#0d0d0d"));
-            pane.getChildren().add(secondary);
+            secondary.getBlock().setX(randomXLayout);
+            secondary.getBlock().setY(600 - curr.getBlock().getHeight());
+            secondary.getBlock().setFill(Color.web("#0d0d0d"));
+            pane.getChildren().add(secondary.getBlock());
 
             collectibleGenerate();
         }
         //score updation
+        if (bonus==null){
+            bonus = new Block(new Rectangle());
+            bonus.getBlock().setX(secondary.getBlock().getX()+secondary.getBlock().getWidth()/2 -3);
+            bonus.getBlock().setY(secondary.getBlock().getY());
+            bonus.getBlock().setWidth(6);
+            bonus.getBlock().setHeight(6);
+            bonus.getBlock().setFill(Color.RED);
+            pane.getChildren().add(bonus.getBlock());
+            bonusCollected = false;
+        }
 
         Game.scene.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.SPACE ) {
@@ -212,7 +225,7 @@ public class Game  {
                 if(!t2.isAlive() || !isrunning) {
 
                     if (stick == null) {
-                        startStickGrowth(Game.scene, curr);
+                        startStickGrowth(Game.scene, curr.getBlock());
                         spaceBarPressed = false;
                     }
                 }
@@ -224,7 +237,7 @@ public class Game  {
                 spaceBarPressed = false;
                 if (!isrunning) {
                     cangrow = false;
-                    System.out.println("NEW thread");
+                    // NEW THREAD
                     t2.run();
                 }
             }
@@ -233,28 +246,22 @@ public class Game  {
 
 
     }
-    private static void moveSprite(){
-        sprite.getSpriteImage().setImage(moveList.get(c));
-    }
-    static void kickSprite(){
-        sprite.getSpriteImage().setImage(kickList.get(c));
-    }
     private static void startStickGrowth(Scene scene, Rectangle curr) {
-        stick = new Rectangle();
-        stick.setWidth(5);
-        stick.setHeight(0);
-        stick.setFill(Color.web("#0d0d0d"));
-        stick.setArcWidth(5.0);
-        stick.setX(curr.getX() + curr.getWidth() - 2);
-        stick.setY(curr.getY());
+        stick = new Block(new Rectangle());
+        stick.getBlock().setWidth(5);
+        stick.getBlock().setHeight(0);
+        stick.getBlock().setFill(Color.web("#0d0d0d"));
+        stick.getBlock().setArcWidth(5.0);
+        stick.getBlock().setX(curr.getX() + curr.getWidth() - 2);
+        stick.getBlock().setY(curr.getY());
 
-        pane.getChildren().add(stick);
+        pane.getChildren().add(stick.getBlock());
 
         Timeline timeline = new Timeline(
                 new KeyFrame(Duration.millis(25), event -> {
                     if (spaceBarPressed && !isrunning && stick != null) {
-                        stick.setHeight(stick.getHeight() + 2);
-                        stick.setY(stick.getY() - 2);
+                        stick.getBlock().setHeight(stick.getBlock().getHeight() + 2);
+                        stick.getBlock().setY(stick.getBlock().getY() - 2);
                     }
                 })
         );
@@ -263,19 +270,19 @@ public class Game  {
         timeline.play();
 
     }
-    private static int angle = 0;
-    private static Timeline rotationTimeline = null;
+    protected static int angle = 0;
+    protected static Timeline rotationTimeline = null;
     static void rotatestick() {
         if (stick == null){
-            startStickGrowth(scene,curr);
+            startStickGrowth(scene,curr.getBlock());
         }
         isrunning = true;
-        double pivotX = stick.getX() + stick.getWidth() / 2.0;
-        double pivotY = stick.getY() + stick.getHeight();
+        double pivotX = stick.getBlock().getX() + stick.getBlock().getWidth() / 2.0;
+        double pivotY = stick.getBlock().getY() + stick.getBlock().getHeight();
         rotationTimeline = new Timeline(
                 new KeyFrame(Duration.millis(5), event -> {
-                    stick.getTransforms().clear();
-                    stick.getTransforms().add(new javafx.scene.transform.Rotate(angle, pivotX, pivotY));
+                    stick.getBlock().getTransforms().clear();
+                    stick.getBlock().getTransforms().add(new javafx.scene.transform.Rotate(angle, pivotX, pivotY));
                     angle += 1;
                     if (angle > 90 && StopRotation) {
                         stopRotation();
@@ -292,8 +299,8 @@ public class Game  {
 
     }
     private static void collectibleGenerate(){
-        if(Math.abs(secondary.getX() - (curr.getWidth()+ curr.getX())) > 100){
-            double xPos = getRando((int)(curr.getX()+curr.getWidth()), (int)(curr.getX()+curr.getWidth()) +50);
+        if(Math.abs(secondary.getBlock().getX() - (curr.getBlock().getWidth()+ curr.getBlock().getX())) > 100){
+            double xPos = getRando((int)(curr.getBlock().getX()+curr.getBlock().getWidth()), (int)(curr.getBlock().getX()+curr.getBlock().getWidth()) +50);
             collected = false;
             collectible = new ImageView();
             collectible.setFitWidth(100);
@@ -302,21 +309,19 @@ public class Game  {
             collectible.setFitWidth(100);
             collectible.setImage(new Image("Collectible.png"));
             Timeline collectibleAnimation = new Timeline(
-                    new KeyFrame(Duration.millis(100), event -> animateSprite(collectible))
+                    new KeyFrame(Duration.millis(100), event -> Sprite.animateSprite(collectible))
             );
             collectibleAnimation.setCycleCount(Timeline.INDEFINITE);
             collectibleAnimation.play();
             pane.getChildren().add(collectible);
         }
     }
-    private static Timeline death;
+    protected static Timeline death;
     private static void dies() {
         cantInvert = true;
-        idleSprite();
+        Sprite.idleSprite();
         death = new Timeline(new KeyFrame(Duration.millis(5),event -> {
-            System.out.println("Sprite.gety = "+sprite.getSpriteImage().getY());
             if(sprite.getSpriteImage().getY() > 555){
-                System.out.println(sprite.getSpriteImage().getY());
                 stopdeath();
             }else{
                 sprite.getSpriteImage().setY(sprite.getSpriteImage().getY()+1);
@@ -337,7 +342,7 @@ public class Game  {
     private static void stopdeath() {
         death.stop();
         death = null;
-        System.out.println("a");
+
 
         bgm.stopMusic();
         deathSound.playMusic();
@@ -438,6 +443,8 @@ public class Game  {
         inverted = false;
         scene = null;
         isrunning = false;
+        scoreB = null;
+        collectibleButton = null;
         bg = null;
         pane = null ;
         collectible = null;
@@ -450,8 +457,8 @@ public class Game  {
         scoreB = null;
         cantInvert = false;
     }
-    private static Timeline revive;
-    private static boolean re = false;
+    protected static Timeline revive;
+    protected static boolean re = false;
     private static void handleButtonClick(String buttonType) throws Exception {
         Stage stage = (Stage)(pane.getScene().getWindow());
         if (buttonType.equalsIgnoreCase("Home")){
@@ -480,11 +487,6 @@ public class Game  {
             stage.show();
         } else if (buttonType.equalsIgnoreCase("Restart")) {
 
-            if (collectibleCount<5){
-                System.out.println("CAN'T REVIVE");
-                return;
-            }
-            collectibleCount-=5;
             // restart the game loop
             System.out.println("RESTART");
             if (Score>highScore){
@@ -506,6 +508,12 @@ public class Game  {
             start(stage,c);
         } else if ((buttonType.equalsIgnoreCase("Revive"))) {
 
+            if (collectibleCount<5){
+                System.out.println("CAN'T REVIVE");
+                return;
+            }
+            collectibleCount-=5;
+
             revive = new Timeline(new KeyFrame(Duration.millis(5),event -> {
                 if (sprite.getSpriteImage().getY() < 325){
                     try {
@@ -522,28 +530,25 @@ public class Game  {
             revive.play();
         }
     }
-
     private static void stopRevive(Stage stage) throws Exception {
         if(re && revive!=null) {
             revive.stop();
             revive = null;
             re = false;
-            sprite.getSpriteImage().setX(secondary.getX() + sprite.getSpriteImage().getFitWidth());
+            sprite.getSpriteImage().setX(secondary.getBlock().getX() + sprite.getSpriteImage().getFitWidth());
             Score--;
             int temp3 = c;
-            Rectangle temp1 = curr;
-            Rectangle temp2 = secondary;
+            Rectangle temp1 = curr.getBlock();
+            Rectangle temp2 = secondary.getBlock();
             reset();
-            curr = temp1;
+            curr = new Block(temp1);
             c = temp3;
-            secondary = temp2;
+            secondary = new Block(temp2);
             sprite.getSpriteImage().setX(0);
             //translateBlocks();
             start(stage, c);
         }
     }
-
-
 
     private static Pane createCircularButton(String text) {
         Circle button = new Circle(25); // Adjust the radius for your preferred size
@@ -564,51 +569,59 @@ public class Game  {
 
         return buttonPane;
     }
-    private static Timeline moveSprite;
+    protected static Timeline moveSprite;
     private static void stopTranslateSpriteToTip() {
         if (moveSprite != null) {
             moveSprite.stop();
             moveSprite = null;
         }
     }
-    private static boolean collected = false;
+    protected static boolean collected = false;
+    protected static boolean bonusCollected = false;
     private static void translateSpriteToTip(double tipX) {
-        moveSprite();
+        Sprite.moveSprite();
 
         moveSprite = new Timeline();
 
         KeyValue keyValueX = new KeyValue(sprite.getSpriteImage().translateXProperty(), tipX +40);
         KeyFrame keyFrame = new KeyFrame(Duration.seconds(1), keyValueX);
 
-        System.out.println(stick.getX() + tipX);
-        System.out.println(secondary.getX());
-        System.out.println(secondary.getX() + secondary.getWidth());
+
+
+
 
         EventHandler<ActionEvent> onFinishLanded = event -> {
-            if (inverted && sprite.getSpriteImage().getBoundsInParent().intersects(secondary.getBoundsInParent())) {
+            if (inverted && sprite.getSpriteImage().getBoundsInParent().intersects(secondary.getBlock().getBoundsInParent())) {
 
                 stopTranslateSpriteToTip();
                 dies();
                 return; // Stop further execution of the handler
             }
 
-            if (tipX + stick.getX() < (secondary.getX() + secondary.getWidth() / 2)) {
+            if (tipX + stick.getBlock().getX() < (secondary.getBlock().getX() + secondary.getBlock().getWidth() / 2)) {
+
+                double mid = secondary.getBlock().getX()+ secondary.getBlock().getWidth()/2;
+                if((tipX + stick.getBlock().getX() < mid+3) && (tipX+ stick.getBlock().getX()>-3)){
+                    bonusCollected = true;
+                }
 
                 moveSprite.getKeyFrames().setAll(
                         new KeyFrame(Duration.ZERO, new KeyValue(sprite.getSpriteImage().translateXProperty(), sprite.getSpriteImage().getTranslateX())),
-                        new KeyFrame(Duration.seconds(1), new KeyValue(sprite.getSpriteImage().translateXProperty(), secondary.getX() + secondary.getWidth() - sprite.getSpriteImage(). getFitWidth()))
+                        new KeyFrame(Duration.seconds(1), new KeyValue(sprite.getSpriteImage().translateXProperty(), secondary.getBlock().getX() + secondary.getBlock().getWidth() - sprite.getSpriteImage(). getFitWidth()))
                 );
             }
 
-            idleSprite();
+            Sprite.idleSprite();
             translateBlocks();
             stopTranslateSpriteToTip();
-            if (collectible != null && sprite.getSpriteImage().getBoundsInParent().intersects(collectible.getBoundsInParent())) {
+            if ( collectible != null && sprite.getSpriteImage().getBoundsInParent().intersects(collectible.getBoundsInParent())) {
                 pane.getChildren().remove(collectible);
-                collected =true;
+                if(!inverted) {
+                    collected = true;
+                    collectibleCount++;
+                    coin.playMusic();
+                }
                 collectible.setOpacity(0);
-                collectibleCount++;
-                coin.playMusic();
             }
         };
 
@@ -617,7 +630,7 @@ public class Game  {
 
         };
 
-        if ((tipX + stick.getX() <= (secondary.getX() + secondary.getWidth()) && (tipX + stick.getX() >= (secondary.getX())))) {
+        if ((tipX + stick.getBlock().getX() <= (secondary.getBlock().getX() + secondary.getBlock().getWidth()) && (tipX + stick.getBlock().getX() >= (secondary.getBlock().getX())))) {
             moveSprite.setOnFinished(onFinishLanded);
         } else {
             moveSprite.setOnFinished(onFinishNotLanded);
@@ -626,14 +639,13 @@ public class Game  {
             if(keyEvent.getCode() == KeyCode.SPACE && !cantInvert){
                 //add here invert code
                 inverted = !inverted;
-                System.out.println(inverted);
                 if(sprite.getSpriteImage().getY() <= 325.0){
                     sprite.getSpriteImage().setY(375);
-                    invertSprite();
+                    Sprite.invertSprite();
 
                 }else{
                     sprite.getSpriteImage().setY(325);
-                    moveSprite();
+                    Sprite.moveSprite();
                 }
 
             }
@@ -646,23 +658,14 @@ public class Game  {
 
     }
 
-
-
-
     private static void stopRotation(){
         rotationTimeline.stop();
         rotationTimeline = null;
         angle = 0;
-        double tip = stick.getHeight();
-        System.out.println("STOPPED ROTATING");
+        double tip = stick.getBlock().getHeight();
         translateSpriteToTip(tip);
     }
-    private static void animateSprite(ImageView sprite) {
-        double currentFrame = (System.currentTimeMillis() / 100) % FRAME_COUNT;
-        double nextFrameX = currentFrame * FRAME_WIDTH;
-        if(sprite != null){
-            sprite.setViewport(new javafx.geometry.Rectangle2D(nextFrameX, 0, FRAME_WIDTH, 100));}
-    }
+
     private static Rectangle createBlock() {
         Rectangle x = new Rectangle();
         double randomWidth = getRando(90,200);
@@ -673,31 +676,32 @@ public class Game  {
         x.setArcWidth(5.0);
         double randomX = getRando(210,400);
         x.setX(randomX);
-        x.setY(600 - curr.getHeight());
+        x.setY(600 - curr.getBlock().getHeight());
         x.setFill(Color.web("#0d0d0d"));
         return x;
     }
-    private static Timeline translateBlocksTimeline = null;
+    protected static Timeline translateBlocksTimeline = null;
     private static void translateBlocks() {
-        System.out.println("MOVE");
-        idleSprite();
+        Sprite.idleSprite();
+        cantInvert = true;
         TranslateTransition bgTransition = new TranslateTransition(Duration.millis(5), bg);
         bgTransition.setByX(-1);
         bgTransition.setCycleCount(TranslateTransition.INDEFINITE);
         bgTransition.play();
         translateBlocksTimeline = new Timeline(
                 new KeyFrame(Duration.millis(5),event -> {
-                    if (secondary.getX() <= 0) {
+                    if (secondary.getBlock().getX() <= 0) {
                         stopTranslation();
                     }else{
-                        curr.setTranslateX(curr.getTranslateX() - 1);
-                        secondary.setX(secondary.getX() - 1);
+                        curr.getBlock().setTranslateX(curr.getBlock().getTranslateX() - 1);
+                        secondary.getBlock().setX(secondary.getBlock().getX() - 1);
+                        bonus.getBlock().setX(bonus.getBlock().getX()-1);
                         sprite.getSpriteImage().setTranslateX(sprite.getSpriteImage().getTranslateX() - 1);
                         if(collectible != null){
                             collectible.setTranslateX(collectible.getTranslateX() -1);
                         }
                         if (stick != null) {
-                            stick.setTranslateX(stick.getTranslateX() - 1);
+                            stick.getBlock().setTranslateX(stick.getBlock().getTranslateX() - 1);
                         }
                     }
                 })
@@ -713,11 +717,13 @@ public class Game  {
         curr = secondary;
         secondary = null;
         // Reset stick
-        stick.setOpacity(0);
+        stick.getBlock().setOpacity(0);
         stick = null;
-        curr.setStroke(Color.RED);
         isrunning = false;
         collectible = null;
+        bonus.getBlock().setOpacity(0);
+        bonus=null;
+        cantInvert = false;
         gameLoop(scene);
     }
     private static int getRando(int min, int max) {
