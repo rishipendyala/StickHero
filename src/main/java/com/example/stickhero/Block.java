@@ -1,53 +1,20 @@
 package com.example.stickhero;
 
-public abstract class Block {
-    private double height;
-    private double width;
+import javafx.scene.shape.Rectangle;
 
-    private double x;
-    private double y;
+public class Block {
 
-    public Block(double height, double width, double x, double y) {
-        this.height = height;
-        this.width = width;
-        this.x = x;
-        this.y = y;
+    private Rectangle block;
+
+    public Block(Rectangle block) {
+        this.block = block;
     }
 
-    public double getWidth() {
-        return width;
+    public Rectangle getBlock() {
+        return block;
     }
 
-    public void setWidth(double width) {
-        this.width = width;
-    }
-
-    public double getX() {
-        return x;
-    }
-
-    public void setX(double x) {
-        this.x = x;
-    }
-
-    public double getY() {
-        return y;
-    }
-
-    public void setY(double y) {
-        this.y = y;
-    }
-
-    public double getHeight() {
-        return height;
-    }
-
-    public void setHeight(double height) {
-        this.height = height;
-    }
-
-    public boolean hasLanded(){
-        // if landed
-        return true;
+    public void setBlock(Rectangle block) {
+        this.block = block;
     }
 }

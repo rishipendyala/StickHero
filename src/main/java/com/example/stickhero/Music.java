@@ -66,55 +66,5 @@ public class Music {
         mediaPlayer.stop();
     }
 
-//    @FXML
-//    public static void playCoinSound()  {
-//        String fileName = "src/main/resources/Audio/cherry.mp3";
-//        CoinSound(fileName);
-//    }
-//
-//    private void CoinSound(String fileName) {
-//
-//            Media media = new Media(new File(fileName).toURI().toString());
-//            mediaPlayer = new MediaPlayer(media);
-//            mediaPlayer.play();
-//
-//
-//    }
-//
-//    @FXML
-//    public static void playBgm() {
-//        String fileName = "src/main/resources/Audio/bgm.mp3";
-//        bgm(fileName);
-//    }
-//
-//    private static void bgm(String fileName){
-//        Media media = new Media(new File(fileName).toURI().toString());
-//        mediaPlayer = new MediaPlayer(media);
-//        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-//        mediaPlayer.play();
-//    }
-//
-//    public static void stopBgm(){
-//        String fileName = "src/main/resources/Audio/bgm.mp3";
-//            Media media = new Media(new File(fileName).toURI().toString());
-//            mediaPlayer = new MediaPlayer(media);
-//            mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-//            mediaPlayer.stop();
-//    }
-//
-//    @FXML
-//    public static void playDeathSound(){
-//        String fileName = "src/main/resources/Audio/dies.mp3";
-//        dies(fileName);
-//    }
-//
-//    private static void dies(String fileName)  {
-//
-//            Media media = new Media(new File(fileName).toURI().toString());
-//            mediaPlayer = new MediaPlayer(media);
-//            mediaPlayer.play();
-//
-//    }
-
 
 }

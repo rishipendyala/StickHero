@@ -4,7 +4,7 @@ import javafx.scene.image.ImageView;
 
 import java.util.ArrayList;
 
-public class Sprite {
+public class Sprite extends Game{
 
     // SINGLETON DESIGN PATTERN HAS BEEN USED HERE
 
@@ -38,98 +38,27 @@ public class Sprite {
         this.spriteImage = spriteImage;
     }
 
-    private Skin currentSkin;
-    private ArrayList<Skin> mySkins = new ArrayList<>();
-    private String userDetails;
 
-    private ArrayList<Collectible> collected = new ArrayList<>();
 
-    private int highScore;
-
-    public Sprite(Skin currentSkin, String userDetails, int collected, int highScore) {
-        this.currentSkin = currentSkin;
-        this.userDetails = userDetails;
-        this.highScore = highScore;
+    public  static void idleSprite(){
+        sprite.getSpriteImage().setImage(idleList.get(c));
+    }
+    public static void invertSprite(){
+        sprite.getSpriteImage().setImage(invertList.get(c));
     }
 
-    public Skin getCurrentSkin() {
-        return currentSkin;
+    public static void moveSprite(){
+        sprite.getSpriteImage().setImage(moveList.get(c));
+    }
+    public static void kickSprite(){
+        sprite.getSpriteImage().setImage(kickList.get(c));
     }
 
-    public void setCurrentSkin(Skin currentSkin) {
-        this.currentSkin = currentSkin;
-    }
-
-    public ArrayList<Skin> getSkins() {
-        return mySkins;
-    }
-
-    public void setSkins(ArrayList<Skin> skins) {
-        this.mySkins = skins;
-    }
-
-    public String getUserDetails() {
-        return userDetails;
-    }
-
-    public void setUserDetails(String userDetails) {
-        this.userDetails = userDetails;
-    }
-
-    public int getHighScore() {
-        return highScore;
-    }
-
-    public void setHighScore(int highScore) {
-        this.highScore = highScore;
-    }
-
-    public ArrayList<Skin> getMySkins() {
-        return mySkins;
-    }
-
-    public void setMySkins(ArrayList<Skin> mySkins) {
-        this.mySkins = mySkins;
-    }
-
-    public void setCollected(ArrayList<Collectible> collected) {
-        this.collected = collected;
-    }
-
-    public void invert(){
-
-    }
-
-    public void move(){
-
-    }
-
-    public void draw(){
-
-    }
-
-    public void changeSkin(){
-
-    }
-
-    public void fall(){
-
-    }
-
-    public void checkRevival(){
-
-    }
-
-    public void revive(){
-;
-    }
-
-    public void isOnStick(){
-
-    }
-
-    public void addSkin(){
-        // add skin to the skins
+    public static void animateSprite(ImageView sprite) {
+        double currentFrame = (System.currentTimeMillis() / 100) % FRAME_COUNT;
+        double nextFrameX = currentFrame * FRAME_WIDTH;
+        if(sprite != null){
+            sprite.setViewport(new javafx.geometry.Rectangle2D(nextFrameX, 0, FRAME_WIDTH, 100));}
     }
 
 }
