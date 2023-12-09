@@ -74,7 +74,6 @@ public class Game  {
         invertList.add(new Image("astro-invert-new.png"));
         invertList.add(new Image("mario-invert-new.png"));
         c = count;
-        System.out.println(c);
         ImageView bg = new ImageView(new Image("background1.png"));
         bg.setFitHeight(600.0);
         bg.setFitWidth(400.0);
@@ -174,7 +173,7 @@ public class Game  {
                 spaceBarPressed = false;
                 if (!isrunning) {
                     cangrow = false;
-
+                    System.out.println("NEW thread");
                     t2.run();
                 }
             }
@@ -201,7 +200,7 @@ public class Game  {
         pane.getChildren().add(stick);
 
         Timeline timeline = new Timeline(
-                new KeyFrame(Duration.millis(10), event -> {
+                new KeyFrame(Duration.millis(25), event -> {
                     if (spaceBarPressed && !isrunning && stick != null) {
                         stick.setHeight(stick.getHeight() + 2);
                         stick.setY(stick.getY() - 2);
@@ -216,6 +215,9 @@ public class Game  {
     private static int angle = 0;
     private static Timeline rotationTimeline = null;
     static void rotatestick() {
+        if (stick == null){
+            startStickGrowth(scene,curr);
+        }
         isrunning = true;
             double pivotX = stick.getX() + stick.getWidth() / 2.0;
             double pivotY = stick.getY() + stick.getHeight();
@@ -226,8 +228,7 @@ public class Game  {
                         angle += 1;
                         if (angle > 90 && StopRotation) {
                             stopRotation();
-                            double tip = stick.getHeight();
-                            translateSpriteToTip(tip);
+
 
 
                         }
@@ -239,10 +240,9 @@ public class Game  {
             rotationTimeline.play();
 
     }
-//fix this
     private static void collectibleGenerate(){
         if(Math.abs(secondary.getX() - (curr.getWidth()+ curr.getX())) > 100){
-        double xPos = getRando((int)(curr.getX()+curr.getWidth()), (int)(secondary.getX()));
+        double xPos = getRando((int)(curr.getX()+curr.getWidth()), (int)(curr.getX()+curr.getWidth()) +50);
         collectible = new ImageView();
         collectible.setFitWidth(100);
         collectible.setX(xPos);
@@ -262,6 +262,7 @@ public class Game  {
         cantInvert = true;
         idleSprite();
         death = new Timeline(new KeyFrame(Duration.millis(5),event -> {
+            System.out.println("Sprite.gety = "+sprite.getY());
             if(sprite.getY() > 555){
                 System.out.println(sprite.getY());
                 stopdeath();
@@ -279,60 +280,59 @@ public class Game  {
 
     }
 
-    private static void stopdeath() {
-        death.stop();
-        death = null;
-        System.out.println("a");
-        Rectangle endscreen = new Rectangle();
-        endscreen.setHeight(200);
-        endscreen.setWidth(300);
-        endscreen.setArcHeight(5.0);
-        endscreen.setArcWidth(5.0);
-        endscreen.setX(55);
-        endscreen.setY(55);
-        endscreen.setFill(Color.GRAY);
-        endscreen.setStroke(Color.BLACK);
-        endscreen.setStrokeWidth(5);
+        private static void stopdeath() {
+            death.stop();
+            death = null;
+            System.out.println("a");
+            Rectangle endscreen = new Rectangle();
+            endscreen.setHeight(200);
+            endscreen.setWidth(300);
+            endscreen.setArcHeight(5.0);
+            endscreen.setArcWidth(5.0);
+            endscreen.setX(55);
+            endscreen.setY(55);
+            endscreen.setFill(Color.GRAY);
+            endscreen.setStroke(Color.BLACK);
+            endscreen.setStrokeWidth(5);
 
-        // Add "GAME OVER" text
-        Text gameOverText = new Text("GAME OVER");
-        gameOverText.setFont(new Font(20));
-        gameOverText.setFill(Color.WHITE);
-        gameOverText.setX(endscreen.getX() + 100);
-        gameOverText.setY(endscreen.getY() + 30);
+            // Add "GAME OVER" text
+            Text gameOverText = new Text("GAME OVER");
+            gameOverText.setFont(new Font(20));
+            gameOverText.setFill(Color.WHITE);
+            gameOverText.setX(endscreen.getX() + 100);
+            gameOverText.setY(endscreen.getY() + 30);
 
-        // Add buttons
-        Pane homeButton = createCircularButton("Home");
-        homeButton.setLayoutX(endscreen.getX() + 50);
-        homeButton.setLayoutY(endscreen.getY() + 150);
+            // Add buttons
+            Pane homeButton = createCircularButton("Home");
+            homeButton.setLayoutX(endscreen.getX() + 50);
+            homeButton.setLayoutY(endscreen.getY() + 150);
 
-        Pane reviveButton = createCircularButton("Revive");
-        reviveButton.setLayoutX(endscreen.getX() + 150);
-        reviveButton.setLayoutY(endscreen.getY() + 150);
+            Pane reviveButton = createCircularButton("Revive");
+            reviveButton.setLayoutX(endscreen.getX() + 150);
+            reviveButton.setLayoutY(endscreen.getY() + 150);
 
-        Pane restartButton = createCircularButton("Restart");
-        restartButton.setLayoutX(endscreen.getX() + 250);
-        restartButton.setLayoutY(endscreen.getY() + 150);
+            Pane restartButton = createCircularButton("Restart");
+            restartButton.setLayoutX(endscreen.getX() + 250);
+            restartButton.setLayoutY(endscreen.getY() + 150);
 
-        Text scoreDisplay = new Text("SCORE:");
-        scoreDisplay.setLayoutX(endscreen.getX()+120);
-        scoreDisplay.setLayoutY(endscreen.getY()+60);
-        scoreDisplay.setFont(new Font(15));
-        scoreDisplay.setFill(Color.WHITE);
+            Text scoreDisplay = new Text("SCORE:");
+            scoreDisplay.setLayoutX(endscreen.getX()+120);
+            scoreDisplay.setLayoutY(endscreen.getY()+60);
+            scoreDisplay.setFont(new Font(15));
+            scoreDisplay.setFill(Color.WHITE);
 
-        Text highScoreDisplay = new Text("HIGH SCORE:");
-        highScoreDisplay.setLayoutX(endscreen.getX()+100);
-        highScoreDisplay.setLayoutY(endscreen.getY()+90);
-        highScoreDisplay.setFont(new Font(15));
-        highScoreDisplay.setFill(Color.WHITE);
+            Text highScoreDisplay = new Text("HIGH SCORE:");
+            highScoreDisplay.setLayoutX(endscreen.getX()+100);
+            highScoreDisplay.setLayoutY(endscreen.getY()+90);
+            highScoreDisplay.setFont(new Font(15));
+            highScoreDisplay.setFill(Color.WHITE);
 
-        setButtonAction(homeButton,"Home");
-        setButtonAction(reviveButton,"Revive");
-        setButtonAction(restartButton,"Restart");
-        pane.getChildren().addAll(endscreen, gameOverText, homeButton, reviveButton, restartButton,scoreDisplay,highScoreDisplay);
+            setButtonAction(homeButton,"Home");
+            setButtonAction(reviveButton,"Revive");
+            setButtonAction(restartButton,"Restart");
+            pane.getChildren().addAll(endscreen, gameOverText, homeButton, reviveButton, restartButton,scoreDisplay,highScoreDisplay);
 
-    }
-
+        }
     private static void setButtonAction(Pane buttonPane, String buttonType) {
         buttonPane.setOnMouseClicked(event -> {
             try {
@@ -367,6 +367,7 @@ public class Game  {
         cantInvert = false;
     }
     private static Timeline revive;
+    private static boolean re = false;
     private static void handleButtonClick(String buttonType) throws Exception {
         Stage stage = (Stage)(pane.getScene().getWindow());
         if (buttonType.equalsIgnoreCase("Home")){
@@ -402,11 +403,25 @@ public class Game  {
     }
 
     private static void stopRevive(Stage stage) throws Exception {
-        sprite.setX(secondary.getX()+sprite.getFitWidth());
-        Score--;
-        translateBlocks();
-        start(stage,c);
+        if(re) {
+            revive.stop();
+            revive = null;
+            re = false;
+            sprite.setX(secondary.getX() + sprite.getFitWidth());
+            Score--;
+            int temp3 = c;
+            Rectangle temp1 = curr;
+            Rectangle temp2 = secondary;
+            reset();
+            curr = temp1;
+            c = temp3;
+            secondary = temp2;
+            sprite.setX(0);
+            //translateBlocks();
+            start(stage, c);
+        }
     }
+
 
 
     private static Pane createCircularButton(String text) {
@@ -426,9 +441,7 @@ public class Game  {
 
         return buttonPane;
     }
-
     private static Timeline moveSprite;
-
     private static void stopTranslateSpriteToTip() {
         if (moveSprite != null) {
             moveSprite.stop();
@@ -504,10 +517,15 @@ public class Game  {
     }
 
 
+
+
     private static void stopRotation(){
         rotationTimeline.stop();
         rotationTimeline = null;
         angle = 0;
+        double tip = stick.getHeight();
+        System.out.println("STOPPED ROTATING");
+        translateSpriteToTip(tip);
     }
     private static void animateSprite(ImageView sprite) {
         double currentFrame = (System.currentTimeMillis() / 100) % FRAME_COUNT;
@@ -531,7 +549,7 @@ public class Game  {
     }
     private static Timeline translateBlocksTimeline = null;
     private static void translateBlocks() {
-
+        System.out.println("MOVE");
         idleSprite();
         TranslateTransition bgTransition = new TranslateTransition(Duration.millis(5), bg);
         bgTransition.setByX(-1);
